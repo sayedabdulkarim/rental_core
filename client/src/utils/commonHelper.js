@@ -119,6 +119,19 @@ const areAllItemsEmpty = (arr) => {
   return arr.every((category) => category.items.length === 0);
 };
 
+// Validation rule for phone number
+const phoneValidator = (_, value) => {
+  if (!value) {
+    return Promise.reject(new Error("Please input your phone number!"));
+  } else if (!/^\d{10}$/.test(value)) {
+    // Regex for exactly 10 digits
+    return Promise.reject(
+      new Error("Please input a valid 10-digit phone number!")
+    );
+  }
+  return Promise.resolve();
+};
+
 export {
   toggleTheme,
   handleShowAlert,
@@ -132,4 +145,5 @@ export {
   calculateTotalPrice,
   filterObjectsByIds,
   areAllItemsEmpty,
+  phoneValidator,
 };
