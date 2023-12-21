@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import Login from "./Login";
+import Signup from "./Signup";
+import { Card } from "antd";
 
-const Index = () => {
+const ParentComponent = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+  };
+
   return (
-    <div>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
-      <h1>Index</h1>
+    <div className="unauth_wrapper">
+      <Card className="form-card">
+        {isLogin ? (
+          <Login onToggle={toggleForm} />
+        ) : (
+          <Signup onToggle={toggleForm} />
+        )}
+      </Card>
     </div>
   );
 };
 
-export default Index;
+export default ParentComponent;
