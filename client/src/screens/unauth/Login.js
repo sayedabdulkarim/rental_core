@@ -15,11 +15,11 @@ const Login = ({ onToggle }) => {
 
   const onFinish = async (values) => {
     // console.log("Received values of form: ", values);
-    const { email_number, password } = values;
+    const { phone } = values;
 
     try {
       const res = await loginUser({
-        phone: email_number,
+        phone,
       }).unwrap();
       console.log(res, " resss");
       localStorage.setItem("jwtToken", res.token);
