@@ -4,6 +4,9 @@ import UserModal from "../modals/userModal.js";
 import { generateToken } from "../utils/generateToken.js";
 //helpers
 
+// @desc register a new user
+// route POST /api/login
+// @access PUBLIC
 const userLogin = asyncHandler(async (req, res) => {
   const { phone } = req.body;
 
@@ -28,7 +31,7 @@ const userLogin = asyncHandler(async (req, res) => {
 });
 
 // @desc register a new user
-// route POST /api/users
+// route POST /api/signup
 // @access PUBLIC
 const userSignUp = asyncHandler(async (req, res) => {
   const { name, email, phone } = req.body;
