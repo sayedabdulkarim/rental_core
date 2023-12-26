@@ -16,8 +16,8 @@ const createRoomObjects = (count, details) => {
 // @route POST /api/properties/addrooms
 // @access PRIVATE (Assuming only logged-in users can add rooms)
 const addRoomDetails = asyncHandler(async (req, res) => {
-  const ownerId = req.user._id; // Assuming you have user's info from the auth middleware
-  const { roomTypes } = req.body;
+  const ownerId = req.user._id; // From auth middleware
+  const { roomTypes } = req.body; // Should be an object with room type keys
 
   // Find the property by the owner ID or create a new one if it doesn't exist
   let property = await PropertyModal.findOne({ owner: ownerId });
@@ -29,17 +29,18 @@ const addRoomDetails = asyncHandler(async (req, res) => {
   // Iterate over each room type and add rooms based on the count
   Object.keys(roomTypes).forEach((type) => {
     const { count, details } = roomTypes[type];
-    property.roomTypes[type] = {
+    // Use set method for Maps in Mongoose
+    property.roomTypes.set(type, {
       count,
       rooms: createRoomObjects(count, details),
-    };
+    });
   });
 
   await property.save();
 
   res.status(200).json({
     message: "Room details added successfully",
-    property: property,
+    property: property.toObject({ getters: true }), // Convert to object to work with Map
   });
 });
 

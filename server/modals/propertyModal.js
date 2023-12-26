@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const RoomDetailSchema = new mongoose.Schema({
   picture: String,
@@ -17,17 +17,20 @@ const RoomTypeSchema = new mongoose.Schema({
   rooms: [RoomSchema],
 });
 
+const RoomTypeContainerSchema = new mongoose.Schema({
+  // Use a Map to hold the room types dynamically
+  roomTypes: {
+    type: Map,
+    of: RoomTypeSchema,
+  },
+});
+
 const PropertySchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  roomTypes: {
-    "1rk": RoomTypeSchema,
-    "1bhk": RoomTypeSchema,
-    "2bhk": RoomTypeSchema,
-    // ... add other room types if necessary
-  },
+  roomTypesContainer: RoomTypeContainerSchema,
 });
 
 const Property = mongoose.model("Property", PropertySchema);
