@@ -25,10 +25,12 @@ const AddRooms = () => {
         if (field === "Count") {
           payload.roomTypes[roomType].count = value;
         } else if (field === "Rent") {
-          payload.roomTypes[roomType].details[field.toLowerCase()] = value;
+          payload.roomTypes[roomType].details[field.toLowerCase()] =
+            value || "";
         } else {
           // Assuming all other fields belong to 'details'
-          payload.roomTypes[roomType].details[field.toLowerCase()] = value;
+          payload.roomTypes[roomType].details[field.toLowerCase()] =
+            value || "";
         }
       }
     });
@@ -42,6 +44,14 @@ const AddRooms = () => {
   };
 
   const roomTypes = ["1rk", "1bhk"];
+
+  const handleRoomCountChange = (value, roomType) => {
+    form.setFieldsValue({ [`${roomType}Count`]: value });
+  };
+
+  const handleRentChange = (value, roomType) => {
+    form.setFieldsValue({ [`${roomType}Rent`]: value });
+  };
 
   return (
     <div className="add_rooms_container">
@@ -66,7 +76,16 @@ const AddRooms = () => {
                     },
                   ]}
                 >
-                  <InputNumber min={1} style={{ width: "100%" }} />
+                  <InputNumber
+                    min={1}
+                    style={{ width: "100%" }}
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onChange={(value) => handleRoomCountChange(value, roomType)}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={8}>
@@ -77,7 +96,16 @@ const AddRooms = () => {
                     { required: true, message: "Please input the rent!" },
                   ]}
                 >
-                  <InputNumber min={1} style={{ width: "100%" }} />
+                  <InputNumber
+                    min={1}
+                    style={{ width: "100%" }}
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onChange={(value) => handleRentChange(value, roomType)}
+                  />
                 </Form.Item>
               </Col>
             </Row>
