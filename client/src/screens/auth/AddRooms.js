@@ -60,7 +60,7 @@ const AddRooms = () => {
     const payload = transformFormValuesToPayload(values);
     try {
       const res = await addRoomDetails({
-        payload: payload.roomTypes,
+        roomTypes: payload.roomTypes,
       }).unwrap();
       console.log(res, " resss");
       handleShowAlert(dispatch, "success", res?.message);
