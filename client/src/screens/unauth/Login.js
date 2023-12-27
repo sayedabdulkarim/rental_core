@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../../apiSlices/userApiSlice";
 import { setCredentials } from "../../slices/authSlice";
 import { handleShowAlert } from "../../utils/commonHelper";
+import { setPropertiesList } from "../../slices/propertySlice";
 
 const Login = ({ onToggle }) => {
   //misc
@@ -25,6 +26,8 @@ const Login = ({ onToggle }) => {
       localStorage.setItem("jwtToken", res.token);
       handleShowAlert(dispatch, "success", res?.message);
       dispatch(setCredentials({ ...res }));
+      dispatch(setPropertiesList(res?.data?.rooms || []));
+
       // navigate("/");
     } catch (err) {
       handleShowAlert(dispatch, "error", err?.data?.message);
