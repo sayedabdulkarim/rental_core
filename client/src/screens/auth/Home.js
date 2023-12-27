@@ -23,7 +23,7 @@ const Home = () => {
   }, [getAllRoomDetails, dispatch]);
 
   return (
-    <div>
+    <div className="home_container">
       {userInfo?.data?.rooms?.length ? (
         <>
           <Dashboard />
