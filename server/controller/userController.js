@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 //modals
 import UserModal from "../modals/userModal.js";
+import PropertyModal from "../modals/propertyModal.js";
+
 import { generateToken } from "../utils/generateToken.js";
 //helpers
 
@@ -10,11 +12,31 @@ import { generateToken } from "../utils/generateToken.js";
 const userLogin = asyncHandler(async (req, res) => {
   const { phone } = req.body;
 
+  // Find the user by phone number
   const user = await UserModal.findOne({ phone });
 
   if (user) {
+    // Find the properties/rooms associated with the user
+    const properties = await PropertyModal.find({ owner: user._id });
+
+    // Generate a token for the user session
     const token = generateToken(user._id);
 
+    // Prepare room data to include in the response, converting MongoDB Maps to Objects
+    const roomData = properties.map((property) => ({
+      ...property.toObject(),
+      roomTypesContainer: {
+        roomTypes: Array.from(property.roomTypesContainer.roomTypes).reduce(
+          (acc, [key, value]) => {
+            acc[key] = value.toObject(); // Convert subdocuments to objects
+            return acc;
+          },
+          {}
+        ),
+      },
+    }));
+
+    // Send the response including the user info, token, and their rooms
     res.status(200).json({
       token,
       data: {
@@ -22,6 +44,7 @@ const userLogin = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         phoneNumber: user.phone,
+        rooms: roomData, // Include the room data in the login response
       },
       message: "Login successful",
     });

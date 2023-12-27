@@ -33,6 +33,6 @@ const PropertySchema = new mongoose.Schema({
   roomTypesContainer: RoomTypeContainerSchema,
 });
 
-const Property = mongoose.model("Property", PropertySchema);
+const PropertyModal = mongoose.model("Property", PropertySchema);
 
-module.exports = Property;
+export default PropertyModal;
