@@ -1,12 +1,47 @@
 import React from "react";
-import { Form, Input, InputNumber, Button, Row, Col } from "antd";
+import { Form, Input, InputNumber, Button, Row, Col, Divider } from "antd";
 
 const AddRooms = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    console.log("Received values of form:", values);
+  const transformFormValuesToPayload = (formValues) => {
+    const payload = {
+      roomTypes: {},
+    };
+
+    Object.entries(formValues).forEach(([key, value]) => {
+      // Adjusted regex to account for room type patterns like "1rk", "1bhk"
+      const match = key.match(
+        /^(\d+[a-z]+)(Count|Rent|Description|EquipmentDetails)$/i
+      );
+      if (match) {
+        const [, roomType, field] = match;
+        // Initialize the room type object if it doesn't already exist
+        payload.roomTypes[roomType] = payload.roomTypes[roomType] || {
+          count: 0,
+          details: {},
+        };
+
+        if (field === "Count") {
+          payload.roomTypes[roomType].count = value;
+        } else if (field === "Rent") {
+          payload.roomTypes[roomType].details[field.toLowerCase()] = value;
+        } else {
+          // Assuming all other fields belong to 'details'
+          payload.roomTypes[roomType].details[field.toLowerCase()] = value;
+        }
+      }
+    });
+
+    return payload;
   };
+
+  const onFinish = (values) => {
+    const payload = transformFormValuesToPayload(values);
+    console.log("Transformed payload:", payload);
+  };
+
+  const roomTypes = ["1rk", "1bhk"];
 
   return (
     <div className="add_rooms_container">
@@ -16,7 +51,7 @@ const AddRooms = () => {
         name="addRoomsForm"
         onFinish={onFinish}
       >
-        {["1rk", "1bhk", "2bhk"].map((roomType) => (
+        {roomTypes.map((roomType, index) => (
           <React.Fragment key={roomType}>
             <h3>{roomType.toUpperCase()} Section</h3>
             <Row gutter={16}>
@@ -59,10 +94,11 @@ const AddRooms = () => {
                   name={`${roomType}EquipmentDetails`}
                   label="Equipment Details"
                 >
-                  <Input />
+                  <Input.TextArea />
                 </Form.Item>
               </Col>
             </Row>
+            {index < roomTypes.length - 1 && <Divider />}
           </React.Fragment>
         ))}
         <Form.Item>
