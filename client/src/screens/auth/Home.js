@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Dashboard from "./Dashboard";
 import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
+import { setPropertiesList } from "../../slices/propertySlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.authReducer);
 
   // RTK Query hook
@@ -15,8 +17,10 @@ const Home = () => {
 
   //async
   useEffect(() => {
-    console.log(getAllRoomDetails, "getAllRoomDetails");
-  }, [getAllRoomDetails]);
+    if (getAllRoomDetails) {
+      dispatch(setPropertiesList(getAllRoomDetails));
+    }
+  }, [getAllRoomDetails, dispatch]);
 
   return (
     <div>

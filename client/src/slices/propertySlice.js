@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  propertiesList: [],
+  propertiesList: null,
   name: "Hello Property Slice",
 };
 
