@@ -8,7 +8,7 @@ import {
 } from "../controller/propertyController.js";
 
 router.post("/properties/addrooms", protectedRoutesWithParser, addRoomDetails);
-router.post(
+router.get(
   "/properties/roomdetails",
   protectedRoutesWithParser,
   getAllRoomDetails
