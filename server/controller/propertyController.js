@@ -1,9 +1,7 @@
-// Assuming you have these models and functions already defined
 import asyncHandler from "express-async-handler";
 //modals
-import UserModal from "../modals/userModal.js";
 import PropertyModal from "../modals/propertyModal.js";
-import { generateToken } from "../utils/generateToken.js";
+
 // Helper function to create room objects based on the count
 const createRoomObjects = (count, details) => {
   return Array.from({ length: count }, (_, index) => ({
@@ -18,6 +16,11 @@ const createRoomObjects = (count, details) => {
 const addRoomDetails = asyncHandler(async (req, res) => {
   const ownerId = req.user._id; // From auth middleware
   const { roomTypes } = req.body; // Should be an object with room type keys
+
+  console.log({
+    ownerId,
+    body: req.body,
+  });
 
   // Find the property by the owner ID or create a new one if it doesn't exist
   let property = await PropertyModal.findOne({ owner: ownerId });

@@ -1,7 +1,25 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Row, Col, Divider } from "antd";
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../../apiSlices/userApiSlice";
+import { setCredentials } from "../../slices/authSlice";
+import { handleShowAlert } from "../../utils/commonHelper";
+import { useAddRoomDetailsMutation } from "../../apiSlices/propertyApiSlice";
 
 const AddRooms = () => {
+  //
+  //misc
+  const dispatch = useDispatch();
+
+  //queries n mutation
+  const [loginUser, { isLoading: loginLoading, error: loginError }] =
+    useLoginMutation();
+
+  const [
+    addRoomDetails,
+    { isLoading: addRoomDetailsLoading, error: addRoomDetailsError },
+  ] = useAddRoomDetailsMutation();
+
   const [form] = Form.useForm();
 
   const transformFormValuesToPayload = (formValues) => {
@@ -38,8 +56,20 @@ const AddRooms = () => {
     return payload;
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     const payload = transformFormValuesToPayload(values);
+    try {
+      const res = await addRoomDetails({
+        payload: payload.roomTypes,
+      }).unwrap();
+      console.log(res, " resss");
+      handleShowAlert(dispatch, "success", res?.message);
+      // dispatch(setCredentials({ ...res }));
+      // navigate("/");
+    } catch (err) {
+      handleShowAlert(dispatch, "error", err?.data?.message);
+      console.log(err, " errr");
+    }
     console.log("Transformed payload:", payload);
   };
 
