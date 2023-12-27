@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Dashboard from "./Dashboard";
+import Dashboard from "../../components/home/Dashboard";
 import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
 import { setPropertiesList } from "../../slices/propertySlice";
 
