@@ -24,7 +24,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true })); // Adjust '50mb'
 
 const corsOptions = {
   origin: ["http://localhost:3000"], // Client's URL, not the server's
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true, // <-- REQUIRED backend setting
 };
 

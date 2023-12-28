@@ -1,22 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   useGetRoomDetailsQuery,
-  useUpdateRoomDetailsQuery,
+  useUpdateRoomDetailsMutation,
 } from "../../apiSlices/propertyApiSlice";
 
 const RoomDetails = () => {
   const { roomType, roomId } = useParams();
+  const [formData, setFormData] = useState({
+    rent: "",
+    description: "",
+    equipmentdetails: "",
+  });
 
-  // Use the query hook provided by RTK Query with the parameters
   const {
     data: roomDetails,
     isLoading,
     isError,
     error,
   } = useGetRoomDetailsQuery({ roomType, roomId });
+  const [updateRoomDetails, { isLoading: isUpdating, isSuccess }] =
+    useUpdateRoomDetailsMutation();
 
-  // Handle loading and error states
+  useEffect(() => {
+    if (roomDetails) {
+      setFormData({
+        rent: roomDetails?.roomDetails?.details.rent,
+        description: roomDetails?.roomDetails?.details.description,
+        equipmentdetails: roomDetails?.roomDetails?.details.equipmentdetails,
+      });
+    }
+  }, [roomDetails]);
+
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    updateRoomDetails({ roomType, roomId, ...formData });
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (isError)
     return <div>Error: {error?.data?.message || "An error occurred"}</div>;
@@ -24,17 +48,37 @@ const RoomDetails = () => {
   return (
     <div>
       <h1>Room Details</h1>
-      {roomDetails && (
-        <>
-          <h2>{roomDetails?.roomDetails?.name}</h2>
-          <p>Rent: {roomDetails?.roomDetails?.details.rent}</p>
-          <p>Description: {roomDetails?.roomDetails?.details.description}</p>
-          <p>
-            Description: {roomDetails?.roomDetails?.details.equipmentdetails}
-          </p>
-          {/* Display more details here */}
-        </>
-      )}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Rent:</label>
+          <input
+            type="number"
+            name="rent"
+            value={formData.rent}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Equipment Details:</label>
+          <textarea
+            name="equipmentdetails"
+            value={formData.equipmentdetails}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit" disabled={isUpdating}>
+          Update Room
+        </button>
+      </form>
+      {isSuccess && <p>Room updated successfully!</p>}
     </div>
   );
 };

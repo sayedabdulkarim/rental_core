@@ -21,7 +21,7 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
       }),
     }),
-    updateRoomDetails: builder.query({
+    updateRoomDetails: builder.mutation({
       query: ({ roomType, roomId, data }) => ({
         url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
         method: "PATCH",
@@ -35,5 +35,5 @@ export const {
   useAddRoomDetailsMutation,
   useGetAllRoomDetailsQuery,
   useGetRoomDetailsQuery,
-  useUpdateRoomDetailsQuery,
+  useUpdateRoomDetailsMutation,
 } = propertyApiSlice;
