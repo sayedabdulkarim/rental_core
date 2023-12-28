@@ -4,7 +4,7 @@ const RoomDetailSchema = new mongoose.Schema({
   picture: String,
   rent: Number,
   description: String,
-  equipmentDetails: String,
+  equipmentdetails: String,
 });
 
 const RoomSchema = new mongoose.Schema({

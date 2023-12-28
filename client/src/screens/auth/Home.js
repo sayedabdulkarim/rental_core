@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Dashboard from "../../components/home/Dashboard";
 import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
@@ -6,6 +7,7 @@ import { setPropertiesList } from "../../slices/propertySlice";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.authReducer);
 
   // RTK Query hook
@@ -24,15 +26,14 @@ const Home = () => {
 
   return (
     <div className="home_container">
-      {userInfo?.data?.rooms?.length ? (
+      {/* {userInfo?.data?.rooms?.length ? ( */}
+      {getAllRoomDetails?.roomDetails?.length ? (
         <>
           <Dashboard />
         </>
       ) : (
         <>
-          <button onClick={() => console.log(userInfo, " usss")}>
-            Add Rooms
-          </button>
+          <button onClick={() => navigate(`/addroom`)}>Add Rooms</button>
         </>
       )}
     </div>

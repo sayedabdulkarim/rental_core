@@ -49,7 +49,7 @@ const addRoomDetails = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     message: "Room details added successfully",
-    property: property.toObject({ getters: true }), // Use toObject() to serialize the Map
+    property, // Use toObject() to serialize the Map
   });
 });
 
