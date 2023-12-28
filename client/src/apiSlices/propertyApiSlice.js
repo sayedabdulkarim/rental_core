@@ -17,7 +17,7 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getRoomDetails: builder.query({
-      query: (roomType, roomId) => ({
+      query: ({ roomType, roomId }) => ({
         url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
       }),
     }),

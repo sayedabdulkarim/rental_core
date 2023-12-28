@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Card, Row, Col, Divider } from "antd";
 
 const Dashboard = () => {
+  //misc
+  const navigate = useNavigate();
   const roomDetails = useSelector(
     (state) => state.propertyReducer.propertiesList?.roomDetails || []
   );
@@ -30,8 +33,8 @@ const Dashboard = () => {
                         bordered={true}
                         style={{ cursor: "pointer" }} // Add cursor pointer style here
                         onClick={() => {
-                          // Add your click handler logic here if needed
-                          console.log("Card clicked!", room);
+                          navigate(`/roomdetails/${roomType}/${room._id}`);
+                          // console.log("Card clicked!", { room, roomType });
                         }}
                       >
                         <p>Rent: {room.details.rent}</p>
