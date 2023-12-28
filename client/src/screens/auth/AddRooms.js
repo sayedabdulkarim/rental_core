@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Row, Col, Divider } from "antd";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../apiSlices/userApiSlice";
 import { setCredentials } from "../../slices/authSlice";
 import { handleShowAlert } from "../../utils/commonHelper";
@@ -10,7 +11,7 @@ const AddRooms = () => {
   //
   //misc
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   //queries n mutation
   const [loginUser, { isLoading: loginLoading, error: loginError }] =
     useLoginMutation();
@@ -65,7 +66,7 @@ const AddRooms = () => {
       console.log(res, " resss");
       handleShowAlert(dispatch, "success", res?.message);
       // dispatch(setCredentials({ ...res }));
-      // navigate("/");
+      navigate("/");
     } catch (err) {
       handleShowAlert(dispatch, "error", err?.data?.message);
       console.log(err, " errr");
