@@ -13,11 +13,19 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
     }),
     getAllRoomDetails: builder.query({
       query: (id) => ({
-        url: `${USERS_URL}/properties/roomdetails`,
+        url: `${USERS_URL}/properties/allroomdetails`,
+      }),
+    }),
+    getRoomDetails: builder.query({
+      query: (roomType, roomId) => ({
+        url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
       }),
     }),
   }),
 });
 
-export const { useAddRoomDetailsMutation, useGetAllRoomDetailsQuery } =
-  propertyApiSlice;
+export const {
+  useAddRoomDetailsMutation,
+  useGetAllRoomDetailsQuery,
+  useGetRoomDetailsQuery,
+} = propertyApiSlice;

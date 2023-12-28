@@ -92,4 +92,36 @@ const getAllRoomDetails = asyncHandler(async (req, res) => {
   });
 });
 
-export { addRoomDetails, getAllRoomDetails };
+// @desc Get details for a single room of a specific room type
+// @route GET /api/properties/roomdetails/:roomType/:roomId
+// @access PRIVATE
+const getRoomDetails = asyncHandler(async (req, res) => {
+  const { roomType, roomId } = req.params;
+  const ownerId = req.user._id; // Assuming user is authenticated and ID is available
+
+  // Find the property by the owner ID
+  const property = await PropertyModal.findOne({ owner: ownerId });
+  if (!property) {
+    res.status(404).json({ message: "Property not found" });
+    return;
+  }
+
+  // Access the specific room type directly
+  const rooms = property.roomTypesContainer.roomTypes[roomType]?.rooms;
+  if (!rooms) {
+    res.status(404).json({ message: `Room type ${roomType} not found` });
+    return;
+  }
+
+  // Find the room with the given ID within the specified room type
+  const roomDetails = rooms.find((room) => room._id.toString() === roomId);
+
+  if (!roomDetails) {
+    res.status(404).json({ message: "Room not found" });
+    return;
+  }
+
+  res.json(roomDetails);
+});
+
+export { addRoomDetails, getAllRoomDetails, getRoomDetails };

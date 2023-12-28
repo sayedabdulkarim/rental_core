@@ -5,13 +5,19 @@ const router = express.Router();
 import {
   addRoomDetails,
   getAllRoomDetails,
+  getRoomDetails,
 } from "../controller/propertyController.js";
 
 router.post("/properties/addrooms", protectedRoutesWithParser, addRoomDetails);
 router.get(
-  "/properties/roomdetails",
+  "/properties/allroomdetails",
   protectedRoutesWithParser,
   getAllRoomDetails
+);
+router.get(
+  "/properties/roomdetails",
+  protectedRoutesWithParser,
+  getRoomDetails
 );
 
 export default router;
