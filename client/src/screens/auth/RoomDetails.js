@@ -1,6 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
+import {
+  useGetRoomDetailsQuery,
+  useUpdateRoomDetailsQuery,
+} from "../../apiSlices/propertyApiSlice";
 
 const RoomDetails = () => {
   const { roomType, roomId } = useParams();
@@ -26,6 +29,9 @@ const RoomDetails = () => {
           <h2>{roomDetails?.roomDetails?.name}</h2>
           <p>Rent: {roomDetails?.roomDetails?.details.rent}</p>
           <p>Description: {roomDetails?.roomDetails?.details.description}</p>
+          <p>
+            Description: {roomDetails?.roomDetails?.details.equipmentdetails}
+          </p>
           {/* Display more details here */}
         </>
       )}

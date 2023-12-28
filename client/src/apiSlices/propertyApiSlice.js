@@ -21,6 +21,13 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
       }),
     }),
+    updateRoomDetails: builder.query({
+      query: ({ roomType, roomId, data }) => ({
+        url: `${USERS_URL}/properties/roomdetails/${roomType}/${roomId}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -28,4 +35,5 @@ export const {
   useAddRoomDetailsMutation,
   useGetAllRoomDetailsQuery,
   useGetRoomDetailsQuery,
+  useUpdateRoomDetailsQuery,
 } = propertyApiSlice;
