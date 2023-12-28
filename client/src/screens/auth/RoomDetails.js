@@ -48,7 +48,8 @@ const RoomDetails = () => {
 
   return (
     <div>
-      <h1>Room Details</h1>
+      <h1>Room Details : {roomDetails?.roomType}</h1>
+      <h3>Room Name : {roomDetails?.roomDetails?.name}</h3>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Rent:</label>
