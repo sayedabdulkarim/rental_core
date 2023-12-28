@@ -101,27 +101,35 @@ const getRoomDetails = asyncHandler(async (req, res) => {
 
   // Find the property by the owner ID
   const property = await PropertyModal.findOne({ owner: ownerId });
+
   if (!property) {
     res.status(404).json({ message: "Property not found" });
     return;
   }
 
-  // Access the specific room type directly
-  const rooms = property.roomTypesContainer.roomTypes[roomType]?.rooms;
-  if (!rooms) {
-    res.status(404).json({ message: `Room type ${roomType} not found` });
+  // Use get() to access the specific room type from the Mongoose Map
+  const roomTypeData = property.roomTypesContainer.roomTypes.get(roomType);
+
+  if (!roomTypeData) {
+    res.status(404).json({ message: `Room type '${roomType}' not found` });
     return;
   }
 
   // Find the room with the given ID within the specified room type
-  const roomDetails = rooms.find((room) => room._id.toString() === roomId);
+  const roomDetails = roomTypeData.rooms.find(
+    (room) => room._id.toString() === roomId
+  );
 
   if (!roomDetails) {
     res.status(404).json({ message: "Room not found" });
     return;
+  } else {
+    res.status(200).json({
+      message: "Room details fetched successfully",
+      roomDetails,
+      roomType,
+    });
   }
-
-  res.json(roomDetails);
 });
 
 export { addRoomDetails, getAllRoomDetails, getRoomDetails };

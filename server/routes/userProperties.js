@@ -15,7 +15,7 @@ router.get(
   getAllRoomDetails
 );
 router.get(
-  "/properties/roomdetails",
+  "/properties/roomdetails/:roomType/:roomId",
   protectedRoutesWithParser,
   getRoomDetails
 );

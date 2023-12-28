@@ -23,9 +23,9 @@ const RoomDetails = () => {
       <h1>Room Details</h1>
       {roomDetails && (
         <>
-          <h2>{roomDetails.name}</h2>
-          <p>Rent: {roomDetails.details.rent}</p>
-          <p>Description: {roomDetails.details.description}</p>
+          <h2>{roomDetails?.roomDetails?.name}</h2>
+          <p>Rent: {roomDetails?.roomDetails?.details.rent}</p>
+          <p>Description: {roomDetails?.roomDetails?.details.description}</p>
           {/* Display more details here */}
         </>
       )}
