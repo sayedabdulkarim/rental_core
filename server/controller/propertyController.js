@@ -135,57 +135,6 @@ const getRoomDetails = asyncHandler(async (req, res) => {
 // @desc Update details for a single room of a specific room type
 // @route PATCH /api/properties/roomdetails/:roomType/:roomId
 // @access PRIVATE
-// const updateRoomDetails = asyncHandler(async (req, res) => {
-//   const { roomType, roomId } = req.params;
-//   const ownerId = req.user._id; // Assuming user is authenticated and ID is available
-//   const updateData = req.body; // Data to update the room with
-
-//   // Find the property by the owner ID
-//   const property = await PropertyModal.findOne({ owner: ownerId });
-
-//   if (!property) {
-//     res.status(404).json({ message: "Property not found" });
-//     return;
-//   }
-
-//   // Access the specific room type
-//   const roomTypeData = property.roomTypesContainer.roomTypes.get(roomType);
-
-//   if (!roomTypeData) {
-//     res.status(404).json({ message: `Room type '${roomType}' not found` });
-//     return;
-//   }
-
-//   // Find the index of the room with the given ID within the specified room type
-//   const roomIndex = roomTypeData.rooms.findIndex(
-//     (room) => room._id.toString() === roomId
-//   );
-
-//   if (roomIndex === -1) {
-//     res.status(404).json({ message: "Room not found" });
-//     return;
-//   }
-
-//   // Update room details at the found index
-//   roomTypeData.rooms[roomIndex] = {
-//     ...roomTypeData.rooms[roomIndex],
-//     ...updateData,
-//   };
-
-//   console.log({
-//     roomId,
-//     roomType,
-//     roomTypeData,
-//     roomIndex,
-//   });
-//   // Save the updated property
-//   // await property.save();
-
-//   res.status(200).json({
-//     message: "Room updated successfully",
-//     roomDetails: roomTypeData.rooms[roomIndex],
-//   });
-// });
 
 const updateRoomDetails = asyncHandler(async (req, res) => {
   const { roomType, roomId } = req.params;
@@ -208,7 +157,6 @@ const updateRoomDetails = asyncHandler(async (req, res) => {
     return;
   }
 
-  // Find the index of the room with the given ID within the specified room type
   const roomIndex = roomTypeData.rooms.findIndex(
     (room) => room._id.toString() === roomId
   );
@@ -220,11 +168,19 @@ const updateRoomDetails = asyncHandler(async (req, res) => {
 
   // Update room details correctly
   const existingRoom = roomTypeData.rooms[roomIndex];
-  if (updateData.details) {
-    existingRoom.details = { ...existingRoom.details, ...updateData };
+  if (updateData) {
+    // Check if updateData matches the structure of the room details
+    if (updateData.rent) existingRoom.details.rent = updateData.rent;
+    if (updateData.description)
+      existingRoom.details.description = updateData.description;
+    if (updateData.equipmentdetails)
+      existingRoom.details.equipmentdetails = updateData.equipmentdetails;
+
+    // Mark the modified path
+    property.markModified(
+      `roomTypesContainer.roomTypes.${roomType}.rooms.${roomIndex}.details`
+    );
   }
-  // Optionally, update other top-level room properties here
-  // For example, if (updateData.newTopLevelField) existingRoom.newTopLevelField = updateData.newTopLevelField;
 
   // Save the updated property
   await property.save();
@@ -235,6 +191,7 @@ const updateRoomDetails = asyncHandler(async (req, res) => {
     roomTypeData,
     roomIndex,
     updateData,
+    existingRoom,
   });
 
   res.status(200).json({
