@@ -38,7 +38,8 @@ const RoomDetails = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    updateRoomDetails({ roomType, roomId, ...formData });
+    console.log(formData, " formDataaa");
+    updateRoomDetails({ roomType, roomId, data: formData });
   };
 
   if (isLoading) return <div>Loading...</div>;
