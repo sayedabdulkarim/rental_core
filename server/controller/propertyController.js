@@ -166,15 +166,15 @@ const updateRoomDetails = asyncHandler(async (req, res) => {
     return;
   }
 
-  // Update room details correctly
+  // Update room details dynamically
   const existingRoom = roomTypeData.rooms[roomIndex];
   if (updateData) {
-    // Check if updateData matches the structure of the room details
-    if (updateData.rent) existingRoom.details.rent = updateData.rent;
-    if (updateData.description)
-      existingRoom.details.description = updateData.description;
-    if (updateData.equipmentdetails)
-      existingRoom.details.equipmentdetails = updateData.equipmentdetails;
+    // Iterate over the keys of updateData and update the details object
+    for (const key in updateData) {
+      if (updateData.hasOwnProperty(key)) {
+        existingRoom.details[key] = updateData[key];
+      }
+    }
 
     // Mark the modified path
     property.markModified(
@@ -184,15 +184,6 @@ const updateRoomDetails = asyncHandler(async (req, res) => {
 
   // Save the updated property
   await property.save();
-
-  console.log({
-    roomId,
-    roomType,
-    roomTypeData,
-    roomIndex,
-    updateData,
-    existingRoom,
-  });
 
   res.status(200).json({
     message: "Room updated successfully",
