@@ -11,7 +11,12 @@ export const tenantApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getAllTenants: builder.query({
+      query: (id) => ({
+        url: `${USERS_URL}/tenants/list`,
+      }),
+    }),
   }),
 });
 
-export const { useAddTenantMutation } = tenantApiSlice;
+export const { useAddTenantMutation, useGetAllTenantsQuery } = tenantApiSlice;

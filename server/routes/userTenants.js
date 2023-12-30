@@ -5,6 +5,6 @@ const router = express.Router();
 import { addTenant, getAllTenants } from "../controller/tenantController.js";
 
 router.post("/tenants/add", protectedRoutesWithParser, addTenant);
-router.post("/tenants/list", protectedRoutesWithParser, getAllTenants);
+router.get("/tenants/list", protectedRoutesWithParser, getAllTenants);
 
 export default router;
