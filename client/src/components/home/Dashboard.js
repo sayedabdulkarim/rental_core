@@ -27,7 +27,18 @@ const Dashboard = () => {
                   {" "}
                   {/* x and y space between cards */}
                   {rooms.map((room) => (
-                    <Col key={room._id} xs={24} sm={12} md={8} lg={6}>
+                    <Col
+                      key={room._id}
+                      xs={24}
+                      sm={12}
+                      md={8}
+                      lg={6}
+                      style={{
+                        border: room?.details?.isAllotted
+                          ? "5px solid green"
+                          : "",
+                      }}
+                    >
                       <Card
                         title={room.name}
                         bordered={true}

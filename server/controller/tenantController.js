@@ -66,4 +66,24 @@ const addTenant = asyncHandler(async (req, res) => {
   });
 });
 
-export { addTenant };
+// @desc Get all tenants for the logged-in user
+// @route GET /api/tenants
+// @access PRIVATE
+const getAllTenants = asyncHandler(async (req, res) => {
+  const ownerId = req.user._id; // Assuming user is authenticated and ID is available
+
+  // Fetch all tenants belonging to the logged-in user's property
+  const tenants = await TenantModal.find({ ownerId });
+
+  if (!tenants) {
+    res.status(404).json({ message: "No tenants found" });
+    return;
+  }
+
+  res.status(200).json({
+    message: "Tenants fetched successfully",
+    tenants,
+  });
+});
+
+export { addTenant, getAllTenants };

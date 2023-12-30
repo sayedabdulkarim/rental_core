@@ -41,6 +41,9 @@ const AppHeader = () => {
         <Link to={"/"} className="logo">
           <NavbarLogo />
         </Link>
+        <Link to={"/tenantlist"} className="">
+          Tenant List
+        </Link>
         {/* Profile Icon */}
         <Popover content={content} trigger="hover">
           <Avatar size="large" icon={<UserOutlined />} />
