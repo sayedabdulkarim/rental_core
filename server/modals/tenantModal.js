@@ -22,4 +22,4 @@ const TenantSchema = new mongoose.Schema({
 
 const TenantModal = mongoose.model("Tenant", TenantSchema);
 
-module.exports = TenantModal;
+export default TenantModal;

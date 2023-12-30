@@ -1,29 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, InputNumber, Button, Select } from "antd";
+import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
+import { setPropertiesList } from "../../slices/propertySlice";
 
 const AddTenant = () => {
+  //misc
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.authReducer);
+  //state
   const [form] = Form.useForm();
+  const [roomData, setRoomData] = useState({}); // State to store room data
+  const [availableRooms, setAvailableRooms] = useState([]); // State for available rooms based on type
+
+  // RTK Query hook
+  const {
+    data: getAllRoomDetails,
+    refetch,
+    isLoading: isLoadinGetAllRoomDetails,
+  } = useGetAllRoomDetailsQuery();
+
+  //func
+  const handleRoomTypeChange = (value) => {
+    // Filter rooms based on selected room type and their allotment status
+    const filteredRooms =
+      roomData[value]?.rooms.filter((room) => !room.details.isAllotted) || [];
+    setAvailableRooms(filteredRooms);
+    form.setFieldsValue({ roomId: undefined }); // Reset the roomId field in form
+  };
 
   const onFinish = (values) => {
     console.log("Received values from form: ", values);
     // Submit these values to your backend here
   };
 
+  useEffect(() => {
+    if (getAllRoomDetails) {
+      console.log(getAllRoomDetails, " ggg");
+      dispatch(setPropertiesList(getAllRoomDetails));
+      setRoomData(
+        getAllRoomDetails?.roomDetails?.[0]?.roomTypesContainer?.roomTypes || []
+      );
+    }
+  }, [getAllRoomDetails, dispatch]);
+
   return (
     <div className="tenant_container">
-      <h1>Add Tenant</h1>
+      <h1 onClick={() => console.log(roomData, " roomData")}>Add Tenant</h1>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         {/* Room details */}
+
+        {/* Room Type Dropdown */}
         <Form.Item
           name="roomType"
           label="Room Type"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Select room type">
-            {/* Populate these options based on available room types */}
-            <Select.Option value="1bhk">1BHK</Select.Option>
-            <Select.Option value="2bhk">2BHK</Select.Option>
-            {/* ... other room types */}
+          <Select
+            placeholder="Select room type"
+            onChange={handleRoomTypeChange}
+          >
+            {Object.keys(roomData).map((roomType) => (
+              <Select.Option key={roomType} value={roomType}>
+                {roomType.toUpperCase()}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        {/* Available Rooms Dropdown */}
+        <Form.Item
+          name="roomId"
+          label="Select Room"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Select a room">
+            {availableRooms.map((room) => (
+              <Select.Option key={room._id} value={room._id}>
+                {room.name}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
 
