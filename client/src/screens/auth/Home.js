@@ -29,7 +29,7 @@ const Home = () => {
       {/* {userInfo?.data?.rooms?.length ? ( */}
       {getAllRoomDetails?.roomDetails?.length ? (
         <>
-          <button>Add Tenant</button>
+          <button onClick={() => navigate(`/addtenant`)}>Add Tenant</button>
           <Dashboard />
         </>
       ) : (
