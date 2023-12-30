@@ -16,7 +16,7 @@ const addTenant = asyncHandler(async (req, res) => {
     ...tenantDetails,
     roomId: roomId,
     roomType: roomType,
-    propertyId: ownerId, // Assuming propertyId is ownerId, adjust as needed
+    ownerId, // Assuming propertyId is ownerId, adjust as needed
   });
 
   // Save the new tenant
@@ -45,8 +45,16 @@ const addTenant = asyncHandler(async (req, res) => {
   }
 
   // Update the room as allotted
-  roomTypeData.rooms[roomIndex].isAllotted = true; // Assuming there's an isAllotted field
+  roomTypeData.rooms[roomIndex].details.isAllotted = true; // Assuming there's an isAllotted field
   property.markModified(`roomTypesContainer.roomTypes.${roomType}.rooms`);
+
+  //   console.log({
+  //     tenantDetails,
+  //     roomType,
+  //     roomId,
+  //     roomTypeData,
+  //     roomIndex,
+  //   });
 
   // Save the updated property
   await property.save();

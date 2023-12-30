@@ -16,7 +16,7 @@ const TenantSchema = new mongoose.Schema({
     aadhaarCardNumber: String,
     // You might want to store Aadhaar Card number securely
   },
-  propertyId: mongoose.Schema.Types.ObjectId, // ID of the property to which the tenant belongs
+  ownerId: mongoose.Schema.Types.ObjectId, // ID of the property to which the tenant belongs
   // Add any additional fields here as needed
 });
 
