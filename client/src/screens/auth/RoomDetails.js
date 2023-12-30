@@ -47,8 +47,10 @@ const RoomDetails = () => {
     return <div>Error: {error?.data?.message || "An error occurred"}</div>;
 
   return (
-    <div>
-      <h1>Room Details : {roomDetails?.roomType}</h1>
+    <div className="room_details_container">
+      <h1 onClick={() => console.log({ roomDetails }, " ccccc")}>
+        Room Details : {roomDetails?.roomType}
+      </h1>
       <h3>Room Name : {roomDetails?.roomDetails?.name}</h3>
       <form onSubmit={handleSubmit}>
         <div>
