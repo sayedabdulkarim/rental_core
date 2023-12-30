@@ -2,9 +2,9 @@ import { apiSlice } from "./";
 
 const USERS_URL = "api/users";
 
-export const propertyApiSlice = apiSlice.injectEndpoints({
+export const tenantApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    addRoomDetails: builder.mutation({
+    addTenant: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/tenants/add`,
         method: "POST",
@@ -14,9 +14,4 @@ export const propertyApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useAddRoomDetailsMutation,
-  useGetAllRoomDetailsQuery,
-  useGetRoomDetailsQuery,
-  useUpdateRoomDetailsMutation,
-} = propertyApiSlice;
+export const { useAddTenantMutation } = tenantApiSlice;

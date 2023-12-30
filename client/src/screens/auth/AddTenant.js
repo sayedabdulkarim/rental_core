@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, InputNumber, Button, Select } from "antd";
-import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
 import { setPropertiesList } from "../../slices/propertySlice";
+import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
+import { useAddTenantMutation } from "../../apiSlices/tenantApiSlice";
+import { handleShowAlert } from "../../utils/commonHelper";
 
 const AddTenant = () => {
   //misc
@@ -14,6 +16,10 @@ const AddTenant = () => {
   const [form] = Form.useForm();
   const [roomData, setRoomData] = useState({}); // State to store room data
   const [availableRooms, setAvailableRooms] = useState([]); // State for available rooms based on type
+
+  //queries n mutation
+  const [addTenant, { isLoading: addTenantLoading, error: addTenantError }] =
+    useAddTenantMutation();
 
   // RTK Query hook
   const {
@@ -31,9 +37,42 @@ const AddTenant = () => {
     form.setFieldsValue({ roomId: undefined }); // Reset the roomId field in form
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Received values from form: ", values);
-    // Submit these values to your backend here
+
+    // Transform the form values into the required payload structure
+    const payload = {
+      tenantDetails: {
+        room: {
+          roomId: values.roomId,
+          roomType: values.roomType,
+          actualPrice: values.actualPrice,
+          finalPrice: values.finalPrice,
+        },
+        advancePayment: values.advancePayment,
+        personalDetails: {
+          name: values["personalDetails.name"],
+          fatherName: values["personalDetails.fatherName"],
+          numberOfAdults: values["personalDetails.numberOfAdults"],
+          numberOfChildren: values["personalDetails.numberOfChildren"],
+          aadhaarCardNumber: values["personalDetails.aadhaarCardNumber"],
+        },
+      },
+      roomType: values.roomType,
+      roomId: values.roomId,
+    };
+
+    try {
+      // Assuming addTenant is your API call function
+      const res = await addTenant(payload).unwrap();
+      console.log(res, " resss");
+      handleShowAlert(dispatch, "success", res?.message);
+      // handleShowAlert and other operations...
+    } catch (err) {
+      // Error handling...
+      handleShowAlert(dispatch, "error", err?.data?.message);
+      console.log(err, " errr");
+    }
   };
 
   useEffect(() => {
