@@ -48,7 +48,17 @@ const RoomDetails = () => {
 
   return (
     <div className="room_details_container">
-      <h1 onClick={() => console.log({ roomDetails }, " ccccc")}>
+      <h1
+        onClick={() =>
+          console.log(
+            {
+              roomDetails,
+              alloted: roomDetails?.roomDetails?.details?.isAllotted,
+            },
+            " ccccc"
+          )
+        }
+      >
         Room Details : {roomDetails?.roomType}
       </h1>
       <h3>Room Name : {roomDetails?.roomDetails?.name}</h3>
@@ -78,9 +88,19 @@ const RoomDetails = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" disabled={isUpdating}>
-          Update Room
-        </button>
+        {roomDetails?.roomDetails?.details?.isAllotted ? (
+          <strong
+            onClick={() =>
+              console.log(roomDetails?.roomDetails?.details?.isAllotted, " ccc")
+            }
+          >
+            This room is already alloted.Click to view the tenant.
+          </strong>
+        ) : (
+          <button type="submit" disabled={isUpdating}>
+            Update Room
+          </button>
+        )}
       </form>
       {isSuccess && <p>Room updated successfully!</p>}
     </div>
