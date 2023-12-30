@@ -14,6 +14,7 @@ import UnAuthScreen from "../screens/unauth";
 import HomeScreen from "../screens/auth/Home";
 import AddRoomsScreen from "../screens/auth/AddRooms";
 import RoomDetailsScreen from "../screens/auth/RoomDetails";
+import AddTenantScreen from "../screens/auth/AddTenant";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ export const router = createBrowserRouter(
           path="/roomdetails/:roomType/:roomId"
           element={<RoomDetailsScreen />}
         />
+        <Route path="/addtenant" element={<AddTenantScreen />} />
       </Route>
       <Route path="*" element={<h1>404 Component</h1>} />
     </Route>

@@ -29,6 +29,7 @@ const Home = () => {
       {/* {userInfo?.data?.rooms?.length ? ( */}
       {getAllRoomDetails?.roomDetails?.length ? (
         <>
+          <button>Add Tenant</button>
           <Dashboard />
         </>
       ) : (
