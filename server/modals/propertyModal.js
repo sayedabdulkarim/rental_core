@@ -5,6 +5,10 @@ const RoomDetailSchema = new mongoose.Schema({
   rent: Number,
   description: String,
   equipmentdetails: String,
+  isAllotted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const RoomSchema = new mongoose.Schema({
