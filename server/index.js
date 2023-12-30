@@ -9,6 +9,7 @@ import connectDb from "./config/db.js";
 //routes
 import userRoutes from "./routes/userRoutes.js";
 import userPropertiesRoutes from "./routes/userProperties.js";
+import userTenantsRoutes from "./routes/userTenants.js";
 
 const port = process.env.PORT || 5000;
 
@@ -42,6 +43,8 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 //properties
 app.use("/api/users", userPropertiesRoutes);
+//tenants
+app.use("/api/users", userTenantsRoutes);
 
 ////////////DEPLOYMENT //////////////
 
