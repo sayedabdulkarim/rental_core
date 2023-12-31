@@ -15,10 +15,16 @@ const TenantSchema = new mongoose.Schema({
     numberOfAdults: Number,
     numberOfChildren: Number,
     aadhaarCardNumber: String,
-    // You might want to store Aadhaar Card number securely
+  },
+  startDate: {
+    type: Date,
+    default: Date.now, // Default to the current date
+  },
+  endDate: {
+    type: Date,
+    // No default value, as this would be set when the tenant leaves
   },
   ownerId: mongoose.Schema.Types.ObjectId, // ID of the property to which the tenant belongs
-  // Add any additional fields here as needed
 });
 
 const TenantModal = mongoose.model("Tenant", TenantSchema);
