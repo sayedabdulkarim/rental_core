@@ -66,6 +66,34 @@ const addTenant = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Edit a tenant's details
+// @route PATCH /api/tenants/edit/:tenantId
+// @access PRIVATE
+const editTenant = asyncHandler(async (req, res) => {
+  const tenantId = req.params.tenantId;
+  const ownerId = req.user._id; // Assuming user is authenticated and ID is available
+  const updateData = req.body;
+
+  // Find the tenant by ID and ownerId to ensure the tenant belongs to the logged-in user
+  const tenant = await TenantModal.findOne({ _id: tenantId, ownerId });
+
+  if (!tenant) {
+    res.status(404).json({ message: "Tenant not found" });
+    return;
+  }
+
+  // Update tenant details
+  Object.assign(tenant, updateData);
+
+  // Save the updated tenant
+  await tenant.save();
+
+  res.status(200).json({
+    message: "Tenant updated successfully",
+    tenant,
+  });
+});
+
 // @desc Get all tenants for the logged-in user
 // @route GET /api/tenants
 // @access PRIVATE
@@ -86,4 +114,4 @@ const getAllTenants = asyncHandler(async (req, res) => {
   });
 });
 
-export { addTenant, getAllTenants };
+export { addTenant, getAllTenants, editTenant };
