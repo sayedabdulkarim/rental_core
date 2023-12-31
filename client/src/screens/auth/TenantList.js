@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Card, Col, Row } from "antd";
 import { useGetAllTenantsQuery } from "../../apiSlices/tenantApiSlice";
 
 const TenantList = () => {
-  // RTK Query hook
+  const navigate = useNavigate(); // Initialize the useNavigate hook
   const { data: getAllTenants, isLoading: getAllTenantsLoading } =
     useGetAllTenantsQuery();
 
   if (getAllTenantsLoading) return <div>Loading...</div>;
+
+  // Function to handle card click
+  const handleCardClick = (tenantId) => {
+    navigate(`/edittenant/${tenantId}`); // Navigate to edit tenant route with tenantId
+  };
 
   return (
     <div className="tenant_list_container">
@@ -18,6 +24,8 @@ const TenantList = () => {
             <Card
               title={`Tenant: ${tenant.personalDetails.name}`}
               bordered={false}
+              onClick={() => handleCardClick(tenant._id)} // Add onClick event to Card
+              style={{ cursor: "pointer" }} // Optional: change cursor on hover
             >
               <p>Room Type: {tenant.room.roomType}</p>
               <p>Actual Price: {tenant.room.actualPrice}</p>

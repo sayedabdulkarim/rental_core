@@ -114,4 +114,51 @@ const getAllTenants = asyncHandler(async (req, res) => {
   });
 });
 
-export { addTenant, getAllTenants, editTenant };
+// @desc Get a tenant by ID with room details
+// @route GET /api/tenants/getTenantById/:tenantId
+// @access PRIVATE
+const getTenantByID = asyncHandler(async (req, res) => {
+  const tenantId = req.params.tenantId;
+  const ownerId = req.user._id; // Assuming user is authenticated and ID is available
+
+  // Find the tenant by ID and ownerId
+  const tenant = await TenantModal.findOne({ _id: tenantId, ownerId });
+  if (!tenant) {
+    res.status(404).json({ message: "Tenant not found" });
+    return;
+  }
+
+  // Find the property
+  const property = await PropertyModal.findOne({ owner: ownerId });
+  if (!property) {
+    res.status(404).json({ message: "Property not found" });
+    return;
+  }
+
+  // Extract room type and room ID from the tenant data
+  const { roomType, roomId } = tenant.room;
+
+  // Access the specific room type
+  const roomTypeData = property.roomTypesContainer.roomTypes.get(roomType);
+  if (!roomTypeData) {
+    res.status(404).json({ message: `Room type '${roomType}' not found` });
+    return;
+  }
+
+  // Find the specific room based on roomId
+  const roomDetails = roomTypeData.rooms.find(
+    (room) => room._id.toString() === roomId.toString()
+  );
+  if (!roomDetails) {
+    res.status(404).json({ message: "Room not found" });
+    return;
+  }
+
+  res.status(200).json({
+    message: "Tenant and room details fetched successfully",
+    tenant,
+    roomDetails,
+  });
+});
+
+export { addTenant, getAllTenants, editTenant, getTenantByID };
