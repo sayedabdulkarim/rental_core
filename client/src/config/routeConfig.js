@@ -35,7 +35,7 @@ export const router = createBrowserRouter(
         />
         <Route path="/addtenant" element={<AddTenantScreen />} />
         <Route path="/tenantlist" element={<TenantListingScreen />} />
-        <Route path="/edittenant" element={<EditTenantScreen />} />
+        <Route path="/edittenant/:tenantId" element={<EditTenantScreen />} />
       </Route>
       <Route path="*" element={<h1>404 Component</h1>} />
     </Route>
