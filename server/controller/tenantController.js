@@ -48,14 +48,6 @@ const addTenant = asyncHandler(async (req, res) => {
   roomTypeData.rooms[roomIndex].details.isAllotted = true; // Assuming there's an isAllotted field
   property.markModified(`roomTypesContainer.roomTypes.${roomType}.rooms`);
 
-  //   console.log({
-  //     tenantDetails,
-  //     roomType,
-  //     roomId,
-  //     roomTypeData,
-  //     roomIndex,
-  //   });
-
   // Save the updated property
   await property.save();
 
