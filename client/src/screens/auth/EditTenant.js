@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import other necessary hooks or services for fetching and updating tenant data
+import { useGetTenantByIDQuery } from "../../apiSlices/tenantApiSlice";
 
 const EditTenant = () => {
   const { tenantId } = useParams(); // This hook allows you to grab parameters from the URL
   const [tenantData, setTenantData] = useState(null);
+
+  const { data: getTenantByID, isLoading: getTenantByIDLoading } =
+    useGetTenantByIDQuery();
 
   useEffect(() => {
     // Fetch tenant data by ID

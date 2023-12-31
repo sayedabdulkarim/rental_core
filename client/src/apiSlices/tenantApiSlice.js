@@ -9,6 +9,11 @@ export const tenantApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/tenants/list`,
       }),
     }),
+    getTenantByID: builder.query({
+      query: (tenantId) => ({
+        url: `${USERS_URL}/tenants/getTenantById/${tenantId}`,
+      }),
+    }),
     addTenant: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/tenants/add`,
@@ -29,5 +34,6 @@ export const tenantApiSlice = apiSlice.injectEndpoints({
 export const {
   useAddTenantMutation,
   useGetAllTenantsQuery,
+  useGetTenantByIDQuery,
   useEditTenantMutation,
 } = tenantApiSlice;
