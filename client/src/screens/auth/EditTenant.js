@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Form, Input, InputNumber, Button } from "antd";
-import { useGetTenantByIDQuery } from "../../apiSlices/tenantApiSlice";
+import {
+  useEditTenantMutation,
+  useGetTenantByIDQuery,
+} from "../../apiSlices/tenantApiSlice";
+import { handleShowAlert } from "../../utils/commonHelper";
 
 const EditTenant = () => {
+  //misc
+  const dispatch = useDispatch();
   const { tenantId } = useParams();
   const [form] = Form.useForm();
   const {
@@ -12,6 +19,10 @@ const EditTenant = () => {
     isError,
     error,
   } = useGetTenantByIDQuery(tenantId);
+
+  //queries n mutation
+  const [editTenant, { isLoading: editTenantLoading, error: editTenantError }] =
+    useEditTenantMutation();
 
   useEffect(() => {
     if (tenantData) {
@@ -31,9 +42,31 @@ const EditTenant = () => {
     }
   }, [tenantData, form]);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     console.log(values);
-    // Handle form submission here
+    // Construct payload with only modified fields
+    const payload = {
+      tenantId: tenantId,
+      data: {
+        personalDetails: {
+          name: values["personalDetails.name"],
+          fatherName: values["personalDetails.fatherName"],
+          numberOfAdults: values["personalDetails.numberOfAdults"],
+          numberOfChildren: values["personalDetails.numberOfChildren"],
+          aadhaarCardNumber: values["personalDetails.aadhaarCardNumber"],
+        },
+        advancePayment: values.advancePayment,
+      },
+    };
+
+    try {
+      const res = await editTenant(payload).unwrap();
+      console.log(res, " resss");
+      handleShowAlert(dispatch, "success", res?.message);
+    } catch (err) {
+      handleShowAlert(dispatch, "error", err?.data?.message);
+      console.log(err, " errr");
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
