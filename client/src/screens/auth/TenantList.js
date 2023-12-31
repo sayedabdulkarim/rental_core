@@ -27,6 +27,7 @@ const TenantList = () => {
               onClick={() => handleCardClick(tenant._id)} // Add onClick event to Card
               style={{ cursor: "pointer" }} // Optional: change cursor on hover
             >
+              <p>Room Name: {tenant.room.name}</p>
               <p>Room Type: {tenant.room.roomType}</p>
               <p>Actual Price: {tenant.room.actualPrice}</p>
               <p>Final Price: {tenant.room.finalPrice}</p>

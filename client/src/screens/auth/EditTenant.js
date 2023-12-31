@@ -3,29 +3,18 @@ import { useParams } from "react-router-dom";
 import { useGetTenantByIDQuery } from "../../apiSlices/tenantApiSlice";
 
 const EditTenant = () => {
-  const { tenantId } = useParams(); // This hook allows you to grab parameters from the URL
-  const [tenantData, setTenantData] = useState(null);
+  const { tenantId } = useParams();
 
-  const { data: getTenantByID, isLoading: getTenantByIDLoading } =
-    useGetTenantByIDQuery();
+  const {
+    data: tenantData,
+    isLoading,
+    isError,
+    error,
+  } = useGetTenantByIDQuery(tenantId);
 
   useEffect(() => {
-    // Fetch tenant data by ID
-    const fetchTenantData = async () => {
-      try {
-        // Replace with your actual API call to fetch tenant data
-        const response = await fetch(`/api/tenants/${tenantId}`);
-        const data = await response.json();
-        setTenantData(data);
-      } catch (error) {
-        console.error("Error fetching tenant data:", error);
-      }
-    };
-
-    if (tenantId) {
-      fetchTenantData();
-    }
-  }, [tenantId]);
+    // You can perform additional logic here if needed, based on tenantData
+  }, [tenantData]);
 
   // Handle form submission
   const handleSubmit = (event) => {
@@ -35,9 +24,9 @@ const EditTenant = () => {
     // Make an API call to update the tenant data
   };
 
-  // if (!tenantData) {
-  //   return <div>Loading...</div>; // Or any other loading state representation
-  // }
+  if (isLoading) return <div>Loading...</div>;
+  if (isError)
+    return <div>Error: {error?.data?.message || "An error occurred"}</div>;
 
   return (
     <div className="edit_tenant_container">
@@ -47,7 +36,10 @@ const EditTenant = () => {
         {/* Example: */}
         <label>
           Name:
-          <input type="text" value={tenantData?.name} /* ... */ />
+          <input
+            type="text"
+            value={tenantData?.personalDetails?.name} /* ... */
+          />
         </label>
         {/* Add other fields for editing tenant information */}
         <button type="submit">Update Tenant</button>

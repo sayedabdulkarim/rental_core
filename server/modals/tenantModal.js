@@ -6,6 +6,7 @@ const TenantSchema = new mongoose.Schema({
     roomType: String,
     actualPrice: Number,
     finalPrice: Number,
+    name: String,
   },
   advancePayment: Number,
   personalDetails: {

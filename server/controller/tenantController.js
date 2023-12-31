@@ -154,6 +154,11 @@ const getTenantByID = asyncHandler(async (req, res) => {
     return;
   }
 
+  console.log({
+    roomDetails,
+    tenant,
+  });
+
   res.status(200).json({
     message: "Tenant and room details fetched successfully",
     tenant,

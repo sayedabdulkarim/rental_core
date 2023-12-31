@@ -15,6 +15,7 @@ const AddTenant = () => {
   //state
   const [form] = Form.useForm();
   const [roomData, setRoomData] = useState({}); // State to store room data
+  const [selectedRoomName, setSelectedRoomName] = useState(null);
   const [availableRooms, setAvailableRooms] = useState([]); // State for available rooms based on type
 
   //queries n mutation
@@ -29,6 +30,11 @@ const AddTenant = () => {
   } = useGetAllRoomDetailsQuery();
 
   //func
+
+  const handleSelectedRoom = (value, option) => {
+    setSelectedRoomName(option.children); // Set the selected room name
+  };
+
   const handleRoomTypeChange = (value) => {
     // Filter rooms based on selected room type and their allotment status
     const filteredRooms =
@@ -44,6 +50,7 @@ const AddTenant = () => {
     const payload = {
       tenantDetails: {
         room: {
+          name: selectedRoomName,
           roomId: values.roomId,
           roomType: values.roomType,
           actualPrice: values.actualPrice,
@@ -115,7 +122,7 @@ const AddTenant = () => {
           label="Select Room"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Select a room">
+          <Select placeholder="Select a room" onSelect={handleSelectedRoom}>
             {availableRooms.map((room) => (
               <Select.Option key={room._id} value={room._id}>
                 {room.name}
