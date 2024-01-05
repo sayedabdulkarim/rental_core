@@ -1,10 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Card, Col, Row } from "antd";
-import { useGetAllTenantsQuery } from "../../apiSlices/tenantApiSlice";
+import {
+  useGetAllTenantsQuery,
+  useRemoveTenantMutation,
+} from "../../apiSlices/tenantApiSlice";
 
 const TenantList = () => {
   const navigate = useNavigate(); // Initialize the useNavigate hook
+
+  //queries n mutation
+  const [
+    removeTenant,
+    { isLoading: removeTenantLoading, error: removeTenantError },
+  ] = useRemoveTenantMutation();
   const { data: getAllTenants, isLoading: getAllTenantsLoading } =
     useGetAllTenantsQuery();
 

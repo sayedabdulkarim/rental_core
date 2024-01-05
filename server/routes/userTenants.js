@@ -7,9 +7,15 @@ import {
   editTenant,
   getAllTenants,
   getTenantByID,
+  removeTenant,
 } from "../controller/tenantController.js";
 
 router.post("/tenants/add", protectedRoutesWithParser, addTenant);
+router.post(
+  "/tenants/remove/:tenantId",
+  protectedRoutesWithParser,
+  removeTenant
+);
 router.get("/tenants/list", protectedRoutesWithParser, getAllTenants);
 router.get(
   "/tenants/getTenantById/:tenantId",

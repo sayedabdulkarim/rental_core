@@ -28,6 +28,13 @@ export const tenantApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    removeTenant: builder.mutation({
+      query: ({ data, tenantId }) => ({
+        url: `${USERS_URL}/tenants/remove/${tenantId}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -36,4 +43,5 @@ export const {
   useGetAllTenantsQuery,
   useGetTenantByIDQuery,
   useEditTenantMutation,
+  useRemoveTenantMutation,
 } = tenantApiSlice;

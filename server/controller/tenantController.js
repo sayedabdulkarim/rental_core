@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import UserModal from "../modals/userModal.js";
 import PropertyModal from "../modals/propertyModal.js";
 import TenantModal from "../modals/tenantModal.js";
+import HistoryTenantModal from "../modals/historyTenantModal.js";
 
 // @desc Add a tenant and mark room as allotted
 // @route POST /api/tenants/add
@@ -56,6 +57,57 @@ const addTenant = asyncHandler(async (req, res) => {
     tenant: newTenant,
     roomDetails: roomTypeData.rooms[roomIndex],
   });
+});
+
+// @desc Remove a tenant and mark room as vacant
+// @route POST /api/tenants/remove/:tenantId
+// @access PRIVATE
+const removeTenant = asyncHandler(async (req, res) => {
+  const { tenantId } = req.params;
+  const { endDate } = req.body; // Get endDate from request body
+  const ownerId = req.user._id;
+
+  // Validate endDate if necessary
+  if (!endDate) {
+    return res.status(400).json({ message: "End date is required" });
+  }
+
+  // Find the tenant
+  const tenant = await TenantModal.findById(tenantId);
+  if (!tenant) {
+    return res.status(404).json({ message: "Tenant not found" });
+  }
+
+  // Archive tenant details
+  const archivedTenantData = {
+    ...tenant.toObject(),
+    endDate: new Date(endDate), // Use the provided endDate
+  };
+  const archivedTenant = new HistoryTenantModal(archivedTenantData);
+  await archivedTenant.save();
+
+  // Remove tenant from the active tenants list
+  await TenantModal.findByIdAndRemove(tenantId);
+
+  // Update room status in property
+  const property = await PropertyModal.findOne({ owner: ownerId });
+  const roomType = tenant.room.roomType;
+  const roomId = tenant.room.roomId;
+
+  const roomTypeData = property.roomTypesContainer.roomTypes.get(roomType);
+  const roomIndex = roomTypeData.rooms.findIndex(
+    (room) => room._id.toString() === roomId
+  );
+
+  if (roomIndex !== -1) {
+    roomTypeData.rooms[roomIndex].details.isAllotted = false;
+    property.markModified(`roomTypesContainer.roomTypes.${roomType}.rooms`);
+    await property.save();
+  }
+
+  res
+    .status(200)
+    .json({ message: "Tenant removed and room updated successfully" });
 });
 
 // @desc Edit a tenant's details
@@ -164,4 +216,4 @@ const getTenantByID = asyncHandler(async (req, res) => {
   });
 });
 
-export { addTenant, getAllTenants, editTenant, getTenantByID };
+export { addTenant, getAllTenants, editTenant, getTenantByID, removeTenant };
