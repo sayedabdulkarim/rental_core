@@ -101,7 +101,8 @@ const removeTenant = asyncHandler(async (req, res) => {
 
   const roomTypeData = property.roomTypesContainer.roomTypes.get(roomType);
   const roomIndex = roomTypeData.rooms.findIndex(
-    (room) => room._id.toString() === roomId
+    (room) => room._id.toString() === roomId.toString()
+    // (room) => console.log(room, " room")
   );
 
   if (roomIndex !== -1) {
@@ -109,6 +110,13 @@ const removeTenant = asyncHandler(async (req, res) => {
     property.markModified(`roomTypesContainer.roomTypes.${roomType}.rooms`);
     await property.save();
   }
+  // console.log({
+  //   roomType,
+  //   roomTypeData,
+  //   roomId,
+  //   roomIndex,
+  //   property,
+  // });
 
   res
     .status(200)
