@@ -67,6 +67,11 @@ const removeTenant = asyncHandler(async (req, res) => {
   const { endDate } = req.body; // Get endDate from request body
   const ownerId = req.user._id;
 
+  console.log({
+    tenantId,
+    endDate,
+  });
+
   // Validate endDate if necessary
   if (!endDate) {
     return res.status(400).json({ message: "End date is required" });

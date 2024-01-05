@@ -31,7 +31,7 @@ export const tenantApiSlice = apiSlice.injectEndpoints({
     removeTenant: builder.mutation({
       query: ({ data, tenantId }) => ({
         url: `${USERS_URL}/tenants/remove/${tenantId}`,
-        method: "PATCH",
+        method: "POST",
         body: data,
       }),
     }),
