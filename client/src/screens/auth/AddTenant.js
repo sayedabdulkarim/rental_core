@@ -72,6 +72,8 @@ const AddTenant = () => {
           numberOfAdults: values["personalDetails.numberOfAdults"],
           numberOfChildren: values["personalDetails.numberOfChildren"],
           aadhaarCardNumber: values["personalDetails.aadhaarCardNumber"],
+          contactNumber: values["personalDetails.contactNumber"],
+          email: values["personalDetails.email"],
         },
         startDate: values.startDate.format("YYYY-MM-DD"), // Format the date
       },
@@ -221,6 +223,20 @@ const AddTenant = () => {
           rules={[{ required: true }]}
         >
           <Input placeholder="Aadhaar Card Number" />
+        </Form.Item>
+
+        <Form.Item
+          name="personalDetails.contactNumber"
+          label="Contact Number"
+          rules={[
+            { required: true, message: "Please input the contact number!" },
+          ]}
+        >
+          <Input placeholder="Contact Number" />
+        </Form.Item>
+
+        <Form.Item name="personalDetails.email" label="Email (Optional)">
+          <Input placeholder="Email" />
         </Form.Item>
 
         {/* Submit button */}

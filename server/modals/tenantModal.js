@@ -19,6 +19,16 @@ const TenantSchema = new mongoose.Schema({
     numberOfAdults: Number,
     numberOfChildren: Number,
     aadhaarCardNumber: String,
+    contactNumber: {
+      // Tenant's contact number
+      type: String,
+      required: true,
+    },
+    email: {
+      // Tenant's email (optional)
+      type: String,
+      required: false,
+    },
   },
   startDate: {
     type: Date,
