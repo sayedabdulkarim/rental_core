@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Select,
+  DatePicker,
+  Checkbox,
+} from "antd";
 import { setPropertiesList } from "../../slices/propertySlice";
 import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
 import { useAddTenantMutation } from "../../apiSlices/tenantApiSlice";
@@ -57,6 +65,7 @@ const AddTenant = () => {
           finalPrice: values.finalPrice,
         },
         advancePayment: values.advancePayment,
+        isElectricPaymentByTenant: values.isElectricPaymentByTenant,
         personalDetails: {
           name: values["personalDetails.name"],
           fatherName: values["personalDetails.fatherName"],
@@ -70,7 +79,7 @@ const AddTenant = () => {
       roomId: values.roomId,
     };
 
-    // console.log({ payload });
+    console.log({ payload });
     try {
       // Assuming addTenant is your API call function
       const res = await addTenant(payload).unwrap();
@@ -139,6 +148,14 @@ const AddTenant = () => {
           rules={[{ required: true, message: "Please select the start date!" }]}
         >
           <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item
+          name="isElectricPaymentByTenant"
+          valuePropName="checked" // Important for checkbox
+          label="Is electric payment by tenant?"
+        >
+          <Checkbox />
         </Form.Item>
 
         <Form.Item

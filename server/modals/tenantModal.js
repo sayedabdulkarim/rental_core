@@ -9,6 +9,10 @@ const TenantSchema = new mongoose.Schema({
     name: String,
   },
   advancePayment: Number,
+  isElectricPaymentByTenant: {
+    type: Boolean,
+    default: false,
+  },
   personalDetails: {
     name: String,
     fatherName: String,
