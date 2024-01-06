@@ -81,7 +81,7 @@ const AddTenant = () => {
       roomId: values.roomId,
     };
 
-    console.log({ payload });
+    // console.log({ payload });
     try {
       // Assuming addTenant is your API call function
       const res = await addTenant(payload).unwrap();
