@@ -18,7 +18,7 @@ const TenantSchema = new mongoose.Schema({
   },
   startDate: {
     type: Date,
-    default: Date.now, // Default to the current date
+    // default: Date.now, // Default to the current date
   },
   endDate: {
     type: Date,

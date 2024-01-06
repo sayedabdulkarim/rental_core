@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, InputNumber, Button, Select } from "antd";
+import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
 import { setPropertiesList } from "../../slices/propertySlice";
 import { useGetAllRoomDetailsQuery } from "../../apiSlices/propertyApiSlice";
 import { useAddTenantMutation } from "../../apiSlices/tenantApiSlice";
@@ -64,11 +64,13 @@ const AddTenant = () => {
           numberOfChildren: values["personalDetails.numberOfChildren"],
           aadhaarCardNumber: values["personalDetails.aadhaarCardNumber"],
         },
+        startDate: values.startDate.format("YYYY-MM-DD"), // Format the date
       },
       roomType: values.roomType,
       roomId: values.roomId,
     };
 
+    // console.log({ payload });
     try {
       // Assuming addTenant is your API call function
       const res = await addTenant(payload).unwrap();
@@ -129,6 +131,14 @@ const AddTenant = () => {
               </Select.Option>
             ))}
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="startDate"
+          label="Start Date"
+          rules={[{ required: true, message: "Please select the start date!" }]}
+        >
+          <DatePicker style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
