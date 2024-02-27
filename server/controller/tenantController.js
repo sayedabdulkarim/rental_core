@@ -4,6 +4,7 @@ import UserModal from "../modals/userModal.js";
 import PropertyModal from "../modals/propertyModal.js";
 import TenantModal from "../modals/tenantModal.js";
 import HistoryTenantModal from "../modals/historyTenantModal.js";
+import { sendSMS } from "../utils/smsHelper.js";
 
 // @desc Add a tenant and mark room as allotted
 // @route POST /api/tenants/add
@@ -51,6 +52,16 @@ const addTenant = asyncHandler(async (req, res) => {
 
   // Save the updated property
   await property.save();
+
+  // const messageToOwner = `A new tenant has been added to room: ${roomTypeData.rooms[roomIndex].name}`;
+  // const messageToTenant = `Hi ${newTenant.personalDetails.name}, you have been added as a tenant. Your rent starts from ${newTenant.startDate.toDateString()}`;
+
+  // Send SMS to Owner and Tenant
+  // await sendSMS("+918296708008", "Hello Owenr new Message  🚽, messageToOwner");
+  // await sendSMS(
+  //   "+917008278152",
+  //   "Hello Tenant U R GUUUUUUUU  🚽  zakkkkkuuuuuu"
+  // );
 
   res.status(200).json({
     message: "Tenant added and room updated successfully",
